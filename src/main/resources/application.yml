@@ -6,8 +6,8 @@ spring:
     # Update these values based on your database setup
     url: jdbc:postgresql://localhost:5432/property_management
     # url: jdbc:mysql://localhost:3306/property_management
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:password}
+    username: danielmolina
+    password: ''
     # driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: org.postgresql.Driver
 

@@ -2,7 +2,6 @@ package com.welltower.propertymanagement.controller;
 
 import com.welltower.propertymanagement.dto.PropertyDTO;
 import com.welltower.propertymanagement.service.PropertyService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/properties")
-@RequiredArgsConstructor
 public class PropertyController {
     private final PropertyService propertyService;
+
+    public PropertyController(PropertyService propertyService) {
+        this.propertyService = propertyService;
+    }
 
     @PostMapping
     public ResponseEntity<PropertyDTO> createProperty(@RequestBody PropertyDTO propertyDTO) {

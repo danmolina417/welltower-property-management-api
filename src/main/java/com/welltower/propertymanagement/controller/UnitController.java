@@ -2,7 +2,6 @@ package com.welltower.propertymanagement.controller;
 
 import com.welltower.propertymanagement.dto.UnitDTO;
 import com.welltower.propertymanagement.service.UnitService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/units")
-@RequiredArgsConstructor
 public class UnitController {
     private final UnitService unitService;
+
+    public UnitController(UnitService unitService) {
+        this.unitService = unitService;
+    }
 
     @PostMapping("/property/{propertyId}")
     public ResponseEntity<UnitDTO> createUnit(

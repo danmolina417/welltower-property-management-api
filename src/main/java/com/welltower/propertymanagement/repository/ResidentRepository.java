@@ -18,7 +18,7 @@ public interface ResidentRepository extends JpaRepository<Resident, Long> {
 
     List<Resident> findByPropertyIdAndIsActive(Long propertyId, Boolean isActive);
 
-    @Query("SELECT r FROM Resident r WHERE r.property.propertyId = :propertyId " +
+    @Query("SELECT r FROM Resident r WHERE r.property.id = :propertyId " +
            "AND r.moveInDate <= :date " +
            "AND (r.moveOutDate IS NULL OR r.moveOutDate > :date)")
     List<Resident> findActiveResidentsOnDate(@Param("propertyId") Long propertyId, 

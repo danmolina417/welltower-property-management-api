@@ -2,7 +2,6 @@ package com.welltower.propertymanagement.controller;
 
 import com.welltower.propertymanagement.dto.RentRollDTO;
 import com.welltower.propertymanagement.service.RentRollService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +12,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reports/rent-roll")
-@RequiredArgsConstructor
 public class RentRollController {
     private final RentRollService rentRollService;
+
+    public RentRollController(RentRollService rentRollService) {
+        this.rentRollService = rentRollService;
+    }
 
     @GetMapping("/property/{propertyId}/date/{date}")
     public ResponseEntity<List<RentRollDTO>> getRentRoll(

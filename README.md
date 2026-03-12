@@ -16,7 +16,6 @@ A comprehensive Spring Boot REST API for managing multifamily residential proper
 - **Spring Data JPA**
 - **PostgreSQL / MySQL**
 - **Maven**
-- **Lombok**
 
 ## Prerequisites
 

@@ -3,7 +3,7 @@ package com.welltower.propertymanagement.service;
 import com.welltower.propertymanagement.dto.PropertyDTO;
 import com.welltower.propertymanagement.model.Property;
 import com.welltower.propertymanagement.repository.PropertyRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,20 +11,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class PropertyService {
     private final PropertyRepository propertyRepository;
 
+    public PropertyService(PropertyRepository propertyRepository) {
+        this.propertyRepository = propertyRepository;
+    }
+
     public PropertyDTO createProperty(PropertyDTO propertyDTO) {
-        Property property = Property.builder()
-                .propertyName(propertyDTO.getPropertyName())
-                .address(propertyDTO.getAddress())
-                .city(propertyDTO.getCity())
-                .state(propertyDTO.getState())
-                .zipCode(propertyDTO.getZipCode())
-                .isActive(true)
-                .build();
+        Property property = new Property();
+        property.setPropertyName(propertyDTO.getPropertyName());
+        property.setAddress(propertyDTO.getAddress());
+        property.setCity(propertyDTO.getCity());
+        property.setState(propertyDTO.getState());
+        property.setZipCode(propertyDTO.getZipCode());
+        property.setIsActive(true);
 
         Property savedProperty = propertyRepository.save(property);
         return convertToDTO(savedProperty);
@@ -74,14 +76,14 @@ public class PropertyService {
     }
 
     private PropertyDTO convertToDTO(Property property) {
-        return PropertyDTO.builder()
-                .propertyId(property.getPropertyId())
-                .propertyName(property.getPropertyName())
-                .address(property.getAddress())
-                .city(property.getCity())
-                .state(property.getState())
-                .zipCode(property.getZipCode())
-                .isActive(property.getIsActive())
-                .build();
+        PropertyDTO dto = new PropertyDTO();
+        dto.setId(property.getId());
+        dto.setPropertyName(property.getPropertyName());
+        dto.setAddress(property.getAddress());
+        dto.setCity(property.getCity());
+        dto.setState(property.getState());
+        dto.setZipCode(property.getZipCode());
+        dto.setIsActive(property.getIsActive());
+        return dto;
     }
 }

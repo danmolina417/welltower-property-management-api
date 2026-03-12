@@ -7,7 +7,7 @@ import com.welltower.propertymanagement.model.Unit;
 import com.welltower.propertymanagement.repository.PropertyRepository;
 import com.welltower.propertymanagement.repository.ResidentRepository;
 import com.welltower.propertymanagement.repository.UnitRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +17,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RentRollService {
     private final PropertyRepository propertyRepository;
     private final UnitRepository unitRepository;
     private final ResidentRepository residentRepository;
+
+    public RentRollService(PropertyRepository propertyRepository,
+                           UnitRepository unitRepository,
+                           ResidentRepository residentRepository) {
+        this.propertyRepository = propertyRepository;
+        this.unitRepository = unitRepository;
+        this.residentRepository = residentRepository;
+    }
 
     public List<RentRollDTO> generateRentRoll(Long propertyId, LocalDate date) {
         Property property = propertyRepository.findById(propertyId)
@@ -34,7 +41,7 @@ public class RentRollService {
         // Create a map for quick resident lookup by unit
         Map<Long, Resident> residentsByUnit = activeResidents.stream()
                 .collect(Collectors.toMap(
-                        r -> r.getUnit() != null ? r.getUnit().getUnitId() : null,
+                        r -> r.getUnit() != null ? r.getUnit().getId() : null,
                         r -> r,
                         (r1, r2) -> r1 // In case of duplicates, keep the first
                 ));
@@ -42,22 +49,21 @@ public class RentRollService {
         List<RentRollDTO> rentRoll = new ArrayList<>();
 
         for (Unit unit : units) {
-            if (!unit.getIsActive()) {
+            if (!Boolean.TRUE.equals(unit.getIsActive())) {
                 continue; // Skip inactive units
             }
 
-            Resident resident = residentsByUnit.get(unit.getUnitId());
+            Resident resident = residentsByUnit.get(unit.getId());
 
-            RentRollDTO rentRollEntry = RentRollDTO.builder()
-                    .date(date)
-                    .propertyId(property.getPropertyId())
-                    .unitId(unit.getUnitId())
-                    .unitNumber(unit.getUnitNumber())
-                    .residentId(resident != null ? resident.getResidentId() : null)
-                    .residentName(resident != null ? 
-                            resident.getFirstName() + " " + resident.getLastName() : null)
-                    .monthlyRent(resident != null ? resident.getMonthlyRent() : BigDecimal.ZERO)
-                    .build();
+            RentRollDTO rentRollEntry = new RentRollDTO();
+            rentRollEntry.setDate(date);
+            rentRollEntry.setPropertyId(property.getId());
+            rentRollEntry.setUnitId(unit.getId());
+            rentRollEntry.setUnitNumber(unit.getUnitNumber());
+            rentRollEntry.setResidentId(resident != null ? resident.getId() : null);
+            rentRollEntry.setResidentName(resident != null ?
+                            resident.getFirstName() + " " + resident.getLastName() : null);
+            rentRollEntry.setMonthlyRent(resident != null ? resident.getMonthlyRent() : BigDecimal.ZERO);
 
             rentRoll.add(rentRollEntry);
         }
