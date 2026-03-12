@@ -1,0 +1,36 @@
+# Maven
+target/
+*.jar
+*.war
+*.rar
+*.zip
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Gradle
+.gradle/
+build/
+
+# Application
+*.log
+application-*.yml
+.env
+.env.local
+
+# OS
+Thumbs.db
+.DS_Store

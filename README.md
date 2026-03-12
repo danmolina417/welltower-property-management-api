@@ -1,0 +1,203 @@
+# WellTower Property Management API
+
+A comprehensive Spring Boot REST API for managing multifamily residential properties, units, residents, and generating rent roll reports.
+
+## Features
+
+- **Property Management**: Create and manage multifamily properties
+- **Unit Management**: Track and manage individual units within properties, including unit status (active/inactive, occupied/vacant)
+- **Resident Management**: Handle resident move-ins, move-outs, and rent changes
+- **Rent Roll Reports**: Generate daily occupancy and revenue reports
+
+## Technology Stack
+
+- **Java 21**
+- **Spring Boot 3.2.0**
+- **Spring Data JPA**
+- **PostgreSQL / MySQL**
+- **Maven**
+- **Lombok**
+
+## Prerequisites
+
+- Java 21 or higher
+- Maven 3.6+
+- PostgreSQL or MySQL database
+
+## Configuration
+
+The application listens on **port 8892**.
+
+### Database Setup
+
+#### PostgreSQL
+
+```bash
+createdb property_management
+```
+
+Update `src/main/resources/application.yml`:
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/property_management
+    username: postgres
+    password: your_password
+```
+
+#### MySQL
+
+```bash
+mysql -u root -p
+CREATE DATABASE property_management;
+exit
+```
+
+Update `src/main/resources/application.yml`:
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/property_management
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+```
+
+## Building and Running
+
+### Build the Project
+
+```bash
+mvn clean install
+```
+
+### Run the Application
+
+```bash
+mvn spring-boot:run
+```
+
+The API will be available at: `http://localhost:8892/api`
+
+## API Endpoints
+
+### Properties
+
+- `POST /api/properties` - Create a property
+- `GET /api/properties` - Get all active properties
+- `GET /api/properties/{propertyId}` - Get a specific property
+- `PUT /api/properties/{propertyId}` - Update a property
+- `DELETE /api/properties/{propertyId}` - Delete (deactivate) a property
+
+### Units
+
+- `POST /api/units/property/{propertyId}` - Create a unit
+- `GET /api/units/{unitId}` - Get a specific unit
+- `GET /api/units/property/{propertyId}` - Get all units in a property
+- `PUT /api/units/{unitId}` - Update a unit
+- `PUT /api/units/{unitId}/deactivate` - Deactivate a unit
+- `PUT /api/units/{unitId}/reactivate` - Reactivate a unit
+
+### Residents
+
+- `POST /api/residents/move-in` - Move in a resident
+- `GET /api/residents/{residentId}` - Get a specific resident
+- `GET /api/residents/property/{propertyId}` - Get all residents in a property
+- `GET /api/residents/unit/{unitId}` - Get all residents in a unit
+- `PUT /api/residents/{residentId}/rent` - Update resident rent
+- `PUT /api/residents/{residentId}/move-out` - Move out a resident (today)
+- `PUT /api/residents/{residentId}/move-out-on-date?moveOutDate=YYYY-MM-DD` - Move out a resident on specific date
+
+### Rent Roll Reports
+
+- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}` - Get rent roll for a specific date (YYYY-MM-DD)
+- `GET /api/reports/rent-roll/property/{propertyId}/range?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` - Get rent roll for date range
+- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}/summary` - Get rent roll summary for a specific date
+
+## Example Usage
+
+### Create a Property
+
+```bash
+curl -X POST http://localhost:8892/api/properties \
+  -H "Content-Type: application/json" \
+  -d '{
+    "property_name": "Sunset Gardens",
+    "address": "123 Main St",
+    "city": "Springfield",
+    "state": "IL",
+    "zip_code": "62701"
+  }'
+```
+
+### Create a Unit
+
+```bash
+curl -X POST http://localhost:8892/api/units/property/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "unit_number": "P1-U01",
+    "bedrooms": "2",
+    "bathrooms": "1",
+    "square_feet": 850.0
+  }'
+```
+
+### Move in a Resident
+
+```bash
+curl -X POST http://localhost:8892/api/residents/move-in \
+  -H "Content-Type: application/json" \
+  -d '{
+    "property_id": 1,
+    "unit_id": 1,
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "phone_number": "555-1234",
+    "monthly_rent": 3000.00,
+    "move_in_date": "2024-01-01"
+  }'
+```
+
+### Get Rent Roll
+
+```bash
+curl http://localhost:8892/api/reports/rent-roll/property/1/date/2024-01-01
+```
+
+## Project Structure
+
+```
+src/
+├── main/
+│   ├── java/com/welltower/propertymanagement/
+│   │   ├── controller/      # REST API controllers
+│   │   ├── service/         # Business logic
+│   │   ├── repository/      # Data access layer
+│   │   ├── model/           # Entity models
+│   │   ├── dto/             # Data transfer objects
+│   │   └── PropertyManagementApplication.java
+│   └── resources/
+│       └── application.yml   # Configuration
+└── test/
+    └── java/com/welltower/propertymanagement/
+```
+
+## Database Schema
+
+The application uses Hibernate ORM with JPA for data persistence. Tables are created automatically on first run:
+
+- `properties` - Store property information
+- `units` - Store unit information for each property
+- `residents` - Store resident information with occupation history
+
+All tables include indexes on frequently queried columns for performance optimization.
+
+## License
+
+Proprietary - WellTower Inc.
