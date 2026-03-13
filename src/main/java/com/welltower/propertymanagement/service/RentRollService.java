@@ -109,4 +109,14 @@ public class RentRollService {
 
         return summary;
     }
+
+    public List<Map<String, Object>> generateRentRollSummariesForDateRange(Long propertyId, LocalDate startDate, LocalDate endDate) {
+        List<Map<String, Object>> summaries = new ArrayList<>();
+
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            summaries.add(generateRentRollSummary(propertyId, date));
+        }
+
+        return summaries;
+    }
 }

@@ -18,6 +18,12 @@ public class PropertyDTO {
     @JsonProperty("zip_code")
     private String zipCode;
 
+    @JsonProperty("manager_id")
+    private Long managerId;
+
+    @JsonProperty("manager_name")
+    private String managerName;
+
     @JsonProperty("is_active")
     private Boolean isActive;
 
@@ -26,13 +32,15 @@ public class PropertyDTO {
     public PropertyDTO() {
     }
 
-    public PropertyDTO(Long id, String propertyName, String address, String city, String state, String zipCode, Boolean isActive, List<UnitDTO> units) {
+    public PropertyDTO(Long id, String propertyName, String address, String city, String state, String zipCode, Long managerId, String managerName, Boolean isActive, List<UnitDTO> units) {
         this.id = id;
         this.propertyName = propertyName;
         this.address = address;
         this.city = city;
         this.state = state;
         this.zipCode = zipCode;
+        this.managerId = managerId;
+        this.managerName = managerName;
         this.isActive = isActive;
         this.units = units;
     }
@@ -83,6 +91,22 @@ public class PropertyDTO {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Long getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 
     public Boolean getIsActive() {

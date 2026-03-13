@@ -48,4 +48,18 @@ public class PropertyController {
         propertyService.deleteProperty(propertyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/{propertyId}/manager/{managerId}")
+    public ResponseEntity<PropertyDTO> assignManagerToProperty(
+            @PathVariable Long propertyId,
+            @PathVariable Long managerId) {
+        PropertyDTO updatedProperty = propertyService.assignManagerToProperty(propertyId, managerId);
+        return new ResponseEntity<>(updatedProperty, HttpStatus.OK);
+    }
+
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<List<PropertyDTO>> getPropertiesByManager(@PathVariable Long managerId) {
+        List<PropertyDTO> properties = propertyService.getPropertiesByManager(managerId);
+        return new ResponseEntity<>(properties, HttpStatus.OK);
+    }
 }

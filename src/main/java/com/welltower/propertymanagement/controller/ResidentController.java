@@ -60,8 +60,25 @@ public class ResidentController {
     @PutMapping("/{residentId}/move-out-on-date")
     public ResponseEntity<Void> moveOutResidentOnDate(
             @PathVariable Long residentId,
-            @RequestParam LocalDate moveOutDate) {
-        residentService.moveOutResidentOnDate(residentId, moveOutDate);
+            @RequestParam String moveOutDate) {
+        LocalDate date;
+        try {
+            // Try ISO format first (yyyy-MM-dd)
+            date = LocalDate.parse(moveOutDate);
+        } catch (Exception e) {
+            // Try MM/dd/yyyy format
+            try {
+                String[] parts = moveOutDate.split("/");
+                if (parts.length == 3) {
+                    date = LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                } else {
+                    throw new IllegalArgumentException("Invalid date format. Use yyyy-MM-dd or MM/dd/yyyy");
+                }
+            } catch (Exception e2) {
+                throw new IllegalArgumentException("Invalid date format. Use yyyy-MM-dd or MM/dd/yyyy");
+            }
+        }
+        residentService.moveOutResidentOnDate(residentId, date);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

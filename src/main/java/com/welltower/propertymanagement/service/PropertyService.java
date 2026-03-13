@@ -2,7 +2,9 @@ package com.welltower.propertymanagement.service;
 
 import com.welltower.propertymanagement.dto.PropertyDTO;
 import com.welltower.propertymanagement.model.Property;
+import com.welltower.propertymanagement.model.Manager;
 import com.welltower.propertymanagement.repository.PropertyRepository;
+import com.welltower.propertymanagement.repository.ManagerRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,18 +16,27 @@ import java.util.stream.Collectors;
 @Transactional
 public class PropertyService {
     private final PropertyRepository propertyRepository;
+    private final ManagerRepository managerRepository;
 
-    public PropertyService(PropertyRepository propertyRepository) {
+    public PropertyService(PropertyRepository propertyRepository, ManagerRepository managerRepository) {
         this.propertyRepository = propertyRepository;
+        this.managerRepository = managerRepository;
     }
 
     public PropertyDTO createProperty(PropertyDTO propertyDTO) {
+        Manager manager = null;
+        if (propertyDTO.getManagerId() != null) {
+            manager = managerRepository.findById(propertyDTO.getManagerId())
+                    .orElseThrow(() -> new RuntimeException("Manager not found with id: " + propertyDTO.getManagerId()));
+        }
+
         Property property = new Property();
         property.setPropertyName(propertyDTO.getPropertyName());
         property.setAddress(propertyDTO.getAddress());
         property.setCity(propertyDTO.getCity());
         property.setState(propertyDTO.getState());
         property.setZipCode(propertyDTO.getZipCode());
+        property.setManager(manager);
         property.setIsActive(true);
 
         Property savedProperty = propertyRepository.save(property);
@@ -75,6 +86,24 @@ public class PropertyService {
         propertyRepository.save(property);
     }
 
+    public PropertyDTO assignManagerToProperty(Long propertyId, Long managerId) {
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new RuntimeException("Property not found with id: " + propertyId));
+
+        Manager manager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new RuntimeException("Manager not found with id: " + managerId));
+
+        property.setManager(manager);
+        Property updatedProperty = propertyRepository.save(property);
+        return convertToDTO(updatedProperty);
+    }
+
+    public List<PropertyDTO> getPropertiesByManager(Long managerId) {
+        return propertyRepository.findByManagerIdAndIsActive(managerId, true).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private PropertyDTO convertToDTO(Property property) {
         PropertyDTO dto = new PropertyDTO();
         dto.setId(property.getId());
@@ -83,6 +112,10 @@ public class PropertyService {
         dto.setCity(property.getCity());
         dto.setState(property.getState());
         dto.setZipCode(property.getZipCode());
+        if (property.getManager() != null) {
+            dto.setManagerId(property.getManager().getId());
+            dto.setManagerName(property.getManager().getFirstName() + " " + property.getManager().getLastName());
+        }
         dto.setIsActive(property.getIsActive());
         return dto;
     }

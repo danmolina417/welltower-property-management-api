@@ -12,4 +12,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     Optional<Property> findByPropertyName(String propertyName);
 
     List<Property> findByIsActive(Boolean isActive);
+
+    List<Property> findByManagerId(Long managerId);
+
+    List<Property> findByManagerIdAndIsActive(Long managerId, Boolean isActive);
 }

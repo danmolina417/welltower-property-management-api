@@ -10,11 +10,14 @@ import com.welltower.propertymanagement.repository.UnitRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 @Transactional
@@ -36,18 +39,18 @@ public class ResidentService {
 
     public ResidentDTO moveInResident(ResidentDTO residentDTO) {
         Property property = propertyRepository.findById(residentDTO.getPropertyId())
-                .orElseThrow(() -> new RuntimeException("Property not found"));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Property not found"));
 
         Unit unit = unitRepository.findById(residentDTO.getUnitId())
-                .orElseThrow(() -> new RuntimeException("Unit not found"));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unit not found"));
 
         if (!unit.getProperty().getId().equals(residentDTO.getPropertyId())) {
-            throw new RuntimeException("Unit does not belong to this property");
+            throw new ResponseStatusException(BAD_REQUEST, "Unit does not belong to this property");
         }
 
         // Check if unit is already occupied
         if (unit.getIsOccupied()) {
-            throw new RuntimeException("Unit is already occupied");
+            throw new ResponseStatusException(BAD_REQUEST, "Unit is already occupied");
         }
 
         Resident resident = new Resident();
@@ -69,13 +72,13 @@ public class ResidentService {
 
     public ResidentDTO getResident(Long residentId) {
         Resident resident = residentRepository.findById(residentId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + residentId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Resident not found with id: " + residentId));
         return convertToDTO(resident);
     }
 
     public List<ResidentDTO> getResidentsByProperty(Long propertyId) {
         propertyRepository.findById(propertyId)
-                .orElseThrow(() -> new RuntimeException("Property not found with id: " + propertyId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Property not found with id: " + propertyId));
 
         return residentRepository.findByPropertyIdAndIsActive(propertyId, true).stream()
                 .map(this::convertToDTO)
@@ -84,7 +87,7 @@ public class ResidentService {
 
     public List<ResidentDTO> getResidentsByUnit(Long unitId) {
         unitRepository.findById(unitId)
-                .orElseThrow(() -> new RuntimeException("Unit not found with id: " + unitId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unit not found with id: " + unitId));
 
         return residentRepository.findByUnitId(unitId).stream()
                 .filter(r -> Boolean.TRUE.equals(r.getIsActive()))
@@ -94,7 +97,7 @@ public class ResidentService {
 
     public ResidentDTO updateRent(Long residentId, BigDecimal newRent) {
         Resident resident = residentRepository.findById(residentId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + residentId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Resident not found with id: " + residentId));
 
         resident.setMonthlyRent(newRent);
         Resident updatedResident = residentRepository.save(resident);
@@ -103,7 +106,7 @@ public class ResidentService {
 
     public void moveOutResident(Long residentId) {
         Resident resident = residentRepository.findById(residentId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + residentId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Resident not found with id: " + residentId));
 
         resident.setMoveOutDate(LocalDate.now());
         resident.setIsActive(false);
@@ -118,7 +121,16 @@ public class ResidentService {
 
     public void moveOutResidentOnDate(Long residentId, LocalDate moveOutDate) {
         Resident resident = residentRepository.findById(residentId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + residentId));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Resident not found with id: " + residentId));
+
+        // Validate move-out date
+        LocalDate today = LocalDate.now();
+        if (moveOutDate.isBefore(today)) {
+            throw new ResponseStatusException(BAD_REQUEST, "Move-out date cannot be in the past");
+        }
+        if (moveOutDate.isBefore(resident.getMoveInDate())) {
+            throw new ResponseStatusException(BAD_REQUEST, "Move-out date cannot be before move-in date");
+        }
 
         resident.setMoveOutDate(moveOutDate);
         resident.setIsActive(false);

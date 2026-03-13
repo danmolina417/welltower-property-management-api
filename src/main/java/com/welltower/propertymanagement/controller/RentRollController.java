@@ -47,4 +47,15 @@ public class RentRollController {
         Map<String, Object> summary = rentRollService.generateRentRollSummary(propertyId, localDate);
         return new ResponseEntity<>(summary, HttpStatus.OK);
     }
+
+    @GetMapping("/property/{propertyId}/range/summary")
+    public ResponseEntity<List<Map<String, Object>>> getRentRollSummariesForDateRange(
+            @PathVariable Long propertyId,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+        List<Map<String, Object>> summaries = rentRollService.generateRentRollSummariesForDateRange(propertyId, start, end);
+        return new ResponseEntity<>(summaries, HttpStatus.OK);
+    }
 }

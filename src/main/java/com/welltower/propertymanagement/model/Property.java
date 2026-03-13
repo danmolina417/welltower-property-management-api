@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "properties")
+@Table(name = "properties", indexes = {
+    @Index(name = "idx_property_manager", columnList = "manager_id")
+})
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,10 @@ public class Property {
 
     @Column
     private String zipCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
     @Column(nullable = false)
     private Boolean isActive = true;
@@ -105,6 +111,14 @@ public class Property {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     public Boolean getIsActive() {
