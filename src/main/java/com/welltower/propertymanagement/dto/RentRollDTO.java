@@ -1,5 +1,6 @@
 package com.welltower.propertymanagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -18,18 +19,23 @@ public class RentRollDTO {
     private String unitNumber;
 
     @JsonProperty("resident_id")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Long residentId;
 
     @JsonProperty("resident_name")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private String residentName;
 
     @JsonProperty("monthly_rent")
     private BigDecimal monthlyRent;
 
+    @JsonProperty("unit_status")
+    private String unitStatus;
+
     public RentRollDTO() {
     }
 
-    public RentRollDTO(LocalDate date, Long propertyId, Long unitId, String unitNumber, Long residentId, String residentName, BigDecimal monthlyRent) {
+    public RentRollDTO(LocalDate date, Long propertyId, Long unitId, String unitNumber, Long residentId, String residentName, BigDecimal monthlyRent, String unitStatus) {
         this.date = date;
         this.propertyId = propertyId;
         this.unitId = unitId;
@@ -37,6 +43,7 @@ public class RentRollDTO {
         this.residentId = residentId;
         this.residentName = residentName;
         this.monthlyRent = monthlyRent;
+        this.unitStatus = unitStatus;
     }
 
     public LocalDate getDate() {
@@ -93,5 +100,13 @@ public class RentRollDTO {
 
     public void setMonthlyRent(BigDecimal monthlyRent) {
         this.monthlyRent = monthlyRent;
+    }
+
+    public String getUnitStatus() {
+        return unitStatus;
+    }
+
+    public void setUnitStatus(String unitStatus) {
+        this.unitStatus = unitStatus;
     }
 }

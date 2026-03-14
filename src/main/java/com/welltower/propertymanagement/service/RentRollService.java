@@ -64,6 +64,7 @@ public class RentRollService {
             rentRollEntry.setResidentName(resident != null ?
                             resident.getFirstName() + " " + resident.getLastName() : null);
             rentRollEntry.setMonthlyRent(resident != null ? resident.getMonthlyRent() : BigDecimal.ZERO);
+            rentRollEntry.setUnitStatus(Boolean.TRUE.equals(unit.getIsActive()) ? "active" : "inactive");
 
             rentRoll.add(rentRollEntry);
         }
