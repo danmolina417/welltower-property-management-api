@@ -133,6 +133,9 @@ The API will be available at: `http://localhost:8892/api`
   - One manager - John Doe
   - One property - Happy Homes
   - Three units - 101, 102, and 103 (as inactive)
+    - If unit 103 is inactive, it will no appear in rent roll report
+    - If unit 103 is made active, it will appear in rent roll report with null resident and $0 rent
+    - You can update 103 as active to see it appear in rent roll report.
   - Two residents - Robert Smith in unit 101 and Jane Summers in unit 102
 
 ### Properties
@@ -164,9 +167,9 @@ The API will be available at: `http://localhost:8892/api`
 
 ### Rent Roll Reports
 
-- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}` - Get rent roll for a specific date (YYYY-MM-DD)
-- `GET /api/reports/rent-roll/property/{propertyId}/range?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` - Get rent roll for date range
-- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}/summary` - Get rent roll summary for a specific date
+- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}` - Get rent roll for a specific date (YYYY-MM-DD) - ONLY ACTIVE UNITS
+- `GET /api/reports/rent-roll/property/{propertyId}/range?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` - Get rent roll for date range - ONLY ACTIVE UNITS
+- `GET /api/reports/rent-roll/property/{propertyId}/date/{date}/summary` - Get rent roll summary for a specific date - ONLY ACTIVE UNITS
 
 ## Example Usage
 
