@@ -23,9 +23,63 @@ A comprehensive Spring Boot REST API for managing multifamily residential proper
 - Maven 3.6+
 - PostgreSQL or MySQL database
 
+### Setup Instructions
+
+- Java 21 (JDK): [Eclipse Temurin Downloads](https://adoptium.net/temurin/releases/?version=21)
+- Maven: [Apache Maven - Installing Maven](https://maven.apache.org/install.html)
+- PostgreSQL: [PostgreSQL Download and Installation](https://www.postgresql.org/download/)
+- MySQL: [MySQL Community Server Download](https://dev.mysql.com/downloads/mysql/)
+
+#### OS-specific Package Manager / Installation Tools
+
+- macOS: [Homebrew Installation](https://brew.sh/)
+- Windows (PC): [WinGet Documentation](https://learn.microsoft.com/windows/package-manager/winget/) or [Chocolatey Installation](https://chocolatey.org/install)
+- Linux: [APT (Debian/Ubuntu)](https://wiki.debian.org/Apt), [DNF (Fedora/RHEL)](https://docs.fedoraproject.org/en-US/quick-docs/dnf/), or [Snapcraft](https://snapcraft.io/docs/installing-snapd)
+
+### Bruno API Setup
+
+- I recommend using Bruno for API testing as I have created a collection for this project with all the endpoints and example requests/responses. You can import this collection into your local Bruno instance to quickly test the API once it's running.
+- For Postman user, I've also included a Postman collection export in the repo that you can import into Postman if you prefer that tool.
+
+#### Install Bruno
+
+- Official download page: [Bruno Downloads](https://www.usebruno.com/downloads)
+- Windows package manager option: `winget install Bruno.Bruno`
+- macOS package manager option: `brew install --cask bruno`
+
+#### Collection Import
+
+- 1. Open Bruno.
+- 2. Click **Open Collection** or **Import Collection**.
+- 3. If you have a Bruno collection folder in this repo, select that folder.
+- 4. If you do not have a collection yet, create one in Bruno and add requests using this base URL: `http://localhost:8892/api`.
+- 5. Set environment variables (recommended):
+  - `baseUrl = http://localhost:8892/api`
+  - `propertyId = 1`
+  - `residentId = 1`
+
+#### Quick Bruno Validation
+
+- Start API: `mvn spring-boot:run`
+- Send `GET {{baseUrl}}/properties`
+- Send `GET {{baseUrl}}/reports/rent-roll/property/{{propertyId}}/date/2025-01-03`
+
 ## Configuration
 
 The application listens on **port 8892**.
+
+### Setup Checklist (Recommended Order)
+
+- 1. Install prerequisites: Java 21+, Maven, and PostgreSQL or MySQL.
+- 2. Verify tools are available in your terminal:
+  - `java -version`
+  - `mvn -version`
+  - `psql --version` or `mysql --version`
+- 3. Create the `property_management` database.
+- 4. Update database credentials in `src/main/resources/application.yml`.
+- 5. Build the project with `mvn clean install`.
+- 6. Start the API with `mvn spring-boot:run`.
+- 7. Confirm the API is reachable at `http://localhost:8892/api`.
 
 ### Database Setup
 
