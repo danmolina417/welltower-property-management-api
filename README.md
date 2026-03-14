@@ -39,7 +39,7 @@ A comprehensive Spring Boot REST API for managing multifamily residential proper
 ### Bruno API Setup
 
 - I recommend using Bruno for API testing as I have created a collection for this project with all the endpoints and example requests/responses. You can import this collection into your local Bruno instance to quickly test the API once it's running.
-- For Postman user, I've also included a Postman collection export in the repo that you can import into Postman if you prefer that tool.
+- For Postman user, I've also included a Postman collection export that you can import into Postman if you prefer that tool.
 
 #### Install Bruno
 
