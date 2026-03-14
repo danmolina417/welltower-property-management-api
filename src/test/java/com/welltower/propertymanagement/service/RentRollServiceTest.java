@@ -8,7 +8,6 @@ import com.welltower.propertymanagement.repository.UnitRepository;
 import com.welltower.propertymanagement.repository.ResidentRepository;
 import com.welltower.propertymanagement.dto.RentRollDTO;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
 class RentRollServiceTest {
 
@@ -123,6 +121,7 @@ class RentRollServiceTest {
         unit3.setIsActive(true);
 
         Resident resident1 = new Resident();
+        resident1.setId(1L);
         resident1.setMonthlyRent(new BigDecimal("1200.00"));
         resident1.setMoveInDate(LocalDate.of(2024, 1, 1));
         resident1.setIsActive(true);
@@ -130,6 +129,7 @@ class RentRollServiceTest {
         resident1.setProperty(property);
 
         Resident resident2 = new Resident();
+        resident2.setId(2L);
         resident2.setMonthlyRent(new BigDecimal("1300.00"));
         resident2.setMoveInDate(LocalDate.of(2024, 1, 1));
         resident2.setIsActive(true);
@@ -167,6 +167,7 @@ class RentRollServiceTest {
         unit.setIsActive(true);
 
         Resident resident = new Resident();
+        resident.setId(1L);
         resident.setMonthlyRent(new BigDecimal("1200.00"));
         resident.setMoveInDate(LocalDate.of(2024, 1, 1));
         resident.setIsActive(true);

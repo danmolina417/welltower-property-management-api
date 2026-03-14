@@ -27,7 +27,7 @@ class ManagerRepositoryTest {
         manager.setFirstName("John");
         manager.setLastName("Doe");
         manager.setEmail("john.doe@example.com");
-        manager.setPhoneNumber("555-1234");
+        manager.setPhoneNumber("222-555-1234");
 
         Manager savedManager = managerRepository.save(manager);
         entityManager.flush();
@@ -48,7 +48,6 @@ class ManagerRepositoryTest {
         manager.setFirstName("John");
         manager.setLastName("Doe");
         manager.setEmail("john.doe@example.com");
-        manager.setPhoneNumber("555-1234");
         entityManager.persistAndFlush(manager);
 
         // Find manager by email
@@ -67,7 +66,6 @@ class ManagerRepositoryTest {
         manager1.setFirstName("John");
         manager1.setLastName("Doe");
         manager1.setEmail("john.doe@example.com");
-        manager1.setPhoneNumber("555-1234");
         managerRepository.save(manager1);
         entityManager.flush();
 
@@ -76,7 +74,6 @@ class ManagerRepositoryTest {
         manager2.setFirstName("Jane");
         manager2.setLastName("Smith");
         manager2.setEmail("john.doe@example.com");
-        manager2.setPhoneNumber("555-5678");
 
         assertThrows(DataIntegrityViolationException.class, () -> {
             managerRepository.save(manager2);
@@ -99,7 +96,6 @@ class ManagerRepositoryTest {
         manager.setFirstName("John");
         manager.setLastName("Doe");
         manager.setEmail("john.doe@example.com");
-        manager.setPhoneNumber("555-1234");
         Manager savedManager = entityManager.persistAndFlush(manager);
 
         // Delete the manager
