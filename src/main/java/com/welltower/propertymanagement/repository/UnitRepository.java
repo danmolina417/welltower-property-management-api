@@ -15,5 +15,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Optional<Unit> findByPropertyIdAndUnitNumber(Long propertyId, String unitNumber);
 
+    List<Unit> findByPropertyIdAndIsOccupied(Long propertyId, Boolean isOccupied);
+
     Integer countByPropertyIdAndIsOccupied(Long propertyId, Boolean isOccupied);
 }
