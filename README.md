@@ -49,20 +49,11 @@ A comprehensive Spring Boot REST API for managing multifamily residential proper
 
 #### Collection Import
 
-- 1. Open Bruno.
-- 2. Click **Open Collection** or **Import Collection**.
-- 3. If you have a Bruno collection folder in this repo, select that folder.
-- 4. If you do not have a collection yet, create one in Bruno and add requests using this base URL: `http://localhost:8892/api`.
-- 5. Set environment variables (recommended):
-  - `baseUrl = http://localhost:8892/api`
-  - `propertyId = 1`
-  - `residentId = 1`
+- 1. Unzip the Bruno_WellTower_Collection.zip.
+- 2. Open Bruno.
+- 3. Click **Open Collection** or **Import Collection**.
+- 4. Open  Bruno collection folder in this repo, select that folder.
 
-#### Quick Bruno Validation
-
-- Start API: `mvn spring-boot:run`
-- Send `GET {{baseUrl}}/properties`
-- Send `GET {{baseUrl}}/reports/rent-roll/property/{{propertyId}}/date/2025-01-03`
 
 ## Configuration
 
@@ -137,6 +128,12 @@ mvn spring-boot:run
 The API will be available at: `http://localhost:8892/api`
 
 ## API Endpoints
+
+- Note: The database should be seeded for your quick testing with:
+  - One manager - John Doe
+  - One property - Happy Homes
+  - Three units - 101, 102, and 103 (as inactive)
+  - Two residents - Robert Smith in unit 101 and Jane Summers in unit 102
 
 ### Properties
 
@@ -245,12 +242,17 @@ src/
 
 The application uses Hibernate ORM with JPA for data persistence. Tables are created automatically on first run:
 
+- `managers` - Store manager information
 - `properties` - Store property information
 - `units` - Store unit information for each property
 - `residents` - Store resident information with occupation history
 
 All tables include indexes on frequently queried columns for performance optimization.
 
-## License
+#### Quick Validation via Bruno or Postman
 
-Proprietary - WellTower Inc.
+- Start API: `mvn spring-boot:run`
+- Send `GET {{baseUrl}}/properties`
+- Send `GET {{baseUrl}}/reports/rent-roll/property/{{propertyId}}/date/2026-02-02`
+
+
